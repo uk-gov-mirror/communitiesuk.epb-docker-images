@@ -14,6 +14,10 @@ runtimes:
           - pyenv global $VERSION
   ruby:
     versions:
+      4.0:
+        commands:
+          - echo "Installing Ruby version 4.0 ..."
+          - rbenv global $RUBY_40_VERSION
       3.4:
         commands:
           - echo "Installing Ruby version 3.4 ..."

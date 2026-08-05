@@ -260,10 +260,12 @@ RUN set -ex \
     && git clone https://github.com/rbenv/ruby-build.git $RUBY_BUILD_SRC_DIR \
     && sh $RUBY_BUILD_SRC_DIR/install.sh
 
-ENV RUBY_34_VERSION="3.4.9"
+ENV RUBY_40_VERSION="4.0.6" \
+    RUBY_34_VERSION="3.4.9"
 
-RUN rbenv install $RUBY_34_VERSION \
-    && rbenv global $RUBY_34_VERSION && ruby -v \
+RUN rbenv install $RUBY_40_VERSION \
+    && rbenv install $RUBY_34_VERSION \
+    && rbenv global $RUBY_40_VERSION && ruby -v \
     && rm -rf /tmp/*
 
 # Use selenium manager to prefetch chrome and chrome driver
@@ -307,7 +309,7 @@ FROM runtimes AS std_v7
 # Activate runtime versions specific to image version.
 RUN n $NODE_22_VERSION
 RUN pyenv global $PYTHON_314_VERSION
-RUN rbenv global $RUBY_34_VERSION
+RUN rbenv global $RUBY_40_VERSION
 
 # Configure SSH
 COPY ssh_config /root/.ssh/config
