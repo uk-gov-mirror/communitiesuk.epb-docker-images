@@ -220,30 +220,17 @@ RUN mkdir -p -m 755 /etc/apt/keyrings \
 FROM tools AS runtimes
 
 #****************      NODEJS     ****************************************************
-
-#nodejs
-ARG SRC_DIR="/usr/src"
-ARG N_SRC_DIR="$SRC_DIR/n"
-
-ENV NODE_22_VERSION="22.22.0" \
-    NODE_24_VERSION="24.14.0"
+ARG N_SRC_DIR="/usr/src/n"
 
 RUN git clone https://github.com/tj/n $N_SRC_DIR \
-    && cd $N_SRC_DIR && make install
+    && cd $N_SRC_DIR \
+    && make install \
+    && rm -rf $N_SRC_DIR \
+    && n 22 \
+    && n 24 \
+    && npm install -g npm@latest
 
-# Install all Node.js versions
-RUN n $NODE_22_VERSION && npm install --save-dev -g -f grunt grunt-cli webpack yarn && \
-    n $NODE_24_VERSION && npm install --save-dev -g -f grunt grunt-cli webpack yarn
-
-# Install npm 11.4.2 globally and copy to Node cache locations
-RUN npm install -g npm@11.4.2 && \
-    cp -rf /usr/local/lib/node_modules/npm /usr/local/n/versions/node/$NODE_22_VERSION/lib/node_modules/ && \
-    cp -rf /usr/local/lib/node_modules/npm /usr/local/n/versions/node/$NODE_24_VERSION/lib/node_modules/
-
-# Clean up
-RUN cd / && rm -rf $N_SRC_DIR && rm -rf /tmp/*
-
-ENV N_PRESERVE_COREPACK=1
+ENV N_PRESERVE_NPM=1
 #****************      END NODEJS     ****************************************************
 
 #**************** RUBY *********************************************************
@@ -307,7 +294,7 @@ RUN set -ex \
 FROM runtimes AS std_v7
 
 # Activate runtime versions specific to image version.
-RUN n $NODE_22_VERSION
+RUN n --offline 24
 RUN pyenv global $PYTHON_314_VERSION
 RUN rbenv global $RUBY_40_VERSION
 
