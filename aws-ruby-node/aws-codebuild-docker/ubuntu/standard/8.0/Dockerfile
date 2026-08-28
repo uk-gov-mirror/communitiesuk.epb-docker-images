@@ -219,21 +219,6 @@ RUN mkdir -p -m 755 /etc/apt/keyrings \
 #=======================End of stage: tools  =================
 FROM tools AS runtimes
 
-#****************      NODEJS     ****************************************************
-ARG N_SRC_DIR="/usr/src/n"
-
-RUN git clone https://github.com/tj/n $N_SRC_DIR \
-    && cd $N_SRC_DIR \
-    && make install \
-    && cd / \
-    && rm -rf $N_SRC_DIR \
-    && n 22 \
-    && n 24 \
-    && npm install -g npm@latest
-
-ENV N_PRESERVE_NPM=1
-#****************      END NODEJS     ****************************************************
-
 #**************** RUBY *********************************************************
 
 #rubyenv
@@ -289,6 +274,20 @@ RUN set -ex \
     && rm -rf /tmp/*
 #**************** END PYTHON *****************************************************
 
+#****************      NODEJS     ****************************************************
+ARG N_SRC_DIR="/usr/src/n"
+
+RUN git clone https://github.com/tj/n $N_SRC_DIR \
+    && cd $N_SRC_DIR \
+    && make install \
+    && cd / \
+    && rm -rf $N_SRC_DIR \
+    && n 22 \
+    && n 24 \
+    && npm install -g npm@latest
+
+ENV N_PRESERVE_NPM=1
+#****************      END NODEJS     ****************************************************
 
 #=======================End of stage: runtimes  =================
 
