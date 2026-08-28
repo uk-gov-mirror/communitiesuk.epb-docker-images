@@ -1,0 +1,20 @@
+name: Test Docker image
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build image
+        run: |
+          cd aws-ruby-node
+          docker build -t aws-standard-ubuntu aws-codebuild-docker/ubuntu/standard/8.0
