@@ -22,10 +22,6 @@ runtimes:
         commands:
           - echo "Installing Ruby version 3.4 ..."
           - rbenv global $RUBY_34_VERSION
-      3.3:
-        commands:
-          - echo "Installing Ruby version 3.3 ..."
-          - rbenv global $RUBY_33_VERSION
       default:
         commands:
           - echo "Installing custom Ruby version $VERSION ..."
@@ -36,20 +32,12 @@ runtimes:
       24:
         commands:
           - echo "Installing Node.js version 24 ..."
-          - n $NODE_24_VERSION
+          - n --offline 24
       22:
         commands:
           - echo "Installing Node.js version 22 ..."
-          - n $NODE_22_VERSION
-      20:
-        commands:
-          - echo "Installing Node.js version 20 ..."
-          - n $NODE_20_VERSION
-      18:
-        commands:
-          - echo "Installing Node.js version 18 ..."
-          - n $NODE_18_VERSION
+          - n --offline 22
       default:
         commands:
           - echo "Installing custom Node.js version $VERSION ..."
-          - n --no-preserve $VERSION && rm -rf /tmp/*
+          - n $VERSION && rm -rf /tmp/*
