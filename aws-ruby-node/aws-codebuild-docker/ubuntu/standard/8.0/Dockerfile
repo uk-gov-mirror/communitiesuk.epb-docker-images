@@ -233,6 +233,9 @@ RUN set -ex \
     && git clone https://github.com/rbenv/ruby-build.git $RUBY_BUILD_SRC_DIR \
     && sh $RUBY_BUILD_SRC_DIR/install.sh
 
+# To add a new version an ENV here, and a command to install the version
+# And then updated runtimes.yml to include the new version
+# Remove any versions no longer in use
 ENV RUBY_40_VERSION="4.0.6" \
     RUBY_34_VERSION="3.4.9"
 
@@ -277,12 +280,14 @@ RUN set -ex \
 #****************      NODEJS     ****************************************************
 ARG N_SRC_DIR="/usr/src/n"
 
+# To add a new version add, for example, `&& n 26 \`
+# And then updated runtimes.yml to include the new version
+# Remove any versions no longer in use
 RUN git clone https://github.com/tj/n $N_SRC_DIR \
     && cd $N_SRC_DIR \
     && make install \
     && cd / \
     && rm -rf $N_SRC_DIR \
-    && n 22 \
     && n 24 \
     && npm install -g npm@latest
 
@@ -297,7 +302,6 @@ FROM runtimes AS std_v7
 ENV CI="true"
 
 # Activate runtime versions specific to image version.
-RUN n --offline 24
 RUN pyenv global $PYTHON_314_VERSION
 RUN rbenv global $RUBY_40_VERSION
 
