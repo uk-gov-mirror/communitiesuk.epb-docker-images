@@ -294,6 +294,9 @@ RUN set -ex \
 
 FROM runtimes AS std_v7
 
+# Flag to say we are in a CI environment
+ENV CI="true"
+
 # Activate runtime versions specific to image version.
 RUN n --offline 24
 RUN pyenv global $PYTHON_314_VERSION
